@@ -1,0 +1,66 @@
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Build output
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Cache and temporary files
+.cache/
+.parcel-cache/
+.tmp/
+temp/
+*.tmp
+
+# Test and tool output
+.nyc_output/
+playwright-report/
+test-results/
+
+# Local databases and uploaded runtime data
+*.sqlite
+*.sqlite3
+*.db
+uploads/
+storage/
+
+# Docker local data
+.docker-data/
+docker-data/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local environment files
+.vercel/
+
+
+# Google Cloud service account credentials
+serviceAccountKey.json
+**/serviceAccountKey.json
