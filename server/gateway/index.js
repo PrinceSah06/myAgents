@@ -24,6 +24,12 @@ app.use("/api/agent",protect,proxywithHeader(process.env.AGENT_SERVICE))
 
 app.get("/api/me", protect, getCurrentUser)
 
+app.post("/",(req, res)=>{
+
+    return res.json('Checking gateway service ')
+
+})
+
 app.listen(port,()=>{
     console.log("Gateway stated at ",port)
 })

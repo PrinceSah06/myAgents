@@ -6,8 +6,20 @@
   "author": "",
   "type": "module",
   "main": "index.js",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "workspaces": [
+    "gateway",
+    "services/*"
+  ],
   "scripts": {
-    
+    "dev": "npm run dev:gateway",
+    "dev:gateway": "npm run dev --workspace=gateway",
+    "dev:auth": "npm run dev --workspace=auth",
+    "dev:chat": "npm run dev --workspace=chat",
+    "dev:agent": "npm run dev --workspace=agent"
   },
   "dependencies": {
     "ioredis": "^6.0.0"

@@ -4,13 +4,27 @@ import { useDispatch } from "react-redux";
 import Home from "./pages/Home";
 import { auth } from "./utils/firebase";
 import { setUserData } from "./redux/userSlice";
+import api from "./utils/axios";
 
 function App() {
   const dispatch = useDispatch();
   const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setAuthReady(false);
+
+      if (user) {
+        try {
+          const token = await user.getIdToken();
+          await api.post("/api/auth/login", { token });
+        } catch (error) {
+          console.error("Unable to establish the app session:", error);
+          setAuthReady(true);
+          return;
+        }
+      }
+
       dispatch(
         setUserData(
           user

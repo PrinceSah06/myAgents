@@ -3,7 +3,7 @@ import Message from "../models/message.model.js";
 
 export const createConversation = async (req, res) => {
   try {
-    const userId = req.header["x-user-id"];
+    const userId = req.get("x-user-id");
 
     console.log("user id  form headers:", userId);
 
@@ -25,7 +25,7 @@ export const createConversation = async (req, res) => {
 
 export const  getConversations = async(req , res )=>{
     try {
-    const userId = req.header["x-user-id"];
+    const userId = req.get("x-user-id");
 
     console.log("user id  form headers:", userId);
 
