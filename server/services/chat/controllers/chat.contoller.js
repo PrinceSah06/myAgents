@@ -88,7 +88,7 @@ export const saveMessage = async (req , res)=>{
 export const getMessage = async (req ,res)=>{
   try {
     
-    const {conversationId} =req.params.conversationId
+    const conversationId = req.params.conversationId
 
     const messages = await Message.find({conversationId
     }).sort({createdAt:-1})

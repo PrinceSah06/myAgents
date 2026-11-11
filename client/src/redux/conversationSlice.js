@@ -10,6 +10,9 @@ const ConversationSlice = createSlice({
 
     setConversations:(state,action)=>{
         state.conversatins= action.payload
+        if (!state.selectedConversation && action.payload.length > 0) {
+            state.selectedConversation = action.payload[0]
+        }
     }
 ,
 

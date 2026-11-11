@@ -45,6 +45,7 @@ const SideBar = () => {
 
     if (data && !Array.isArray(data)) {
       dispatch(addConversation(data));
+      dispatch(setSelectConversation(data));
     }
   };
 
