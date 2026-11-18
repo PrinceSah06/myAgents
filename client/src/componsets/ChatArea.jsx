@@ -13,14 +13,18 @@ const ChatArea = () => {
 
   const dispatch = useDispatch()
   useEffect(() => {
+    let cancelled = false
+    dispatch(setMessages([]))
+
     const getMsg = async () => {
       if (!conversationId) return
 
       const data = await getMessages(conversationId)
-      dispatch(setMessages(data))
+      if (!cancelled) dispatch(setMessages(Array.isArray(data) ? data : []))
     }
 
     getMsg()
+    return () => { cancelled = true }
   }, [conversationId, dispatch])
   return (
     <div  className='flex-1 flex flex-col'>

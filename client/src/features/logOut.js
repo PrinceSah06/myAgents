@@ -9,9 +9,10 @@ async function logOut() {
 
         console.log(data,"logout")
         
+        return true;
     } catch (error) {
         console.log("error while logout :" ,error)
-        
+        return false;
     }
   
 }

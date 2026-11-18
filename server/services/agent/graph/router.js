@@ -51,7 +51,7 @@ import { getModel } from "../config/llmModel.js";
 
   const response = await llm.invoke(prompt);
 
-  console.log("ai Router agent resopnse :", response)
+  console.log("ai Router agent resopnse :", response.content)
 
   return {
     ...state,

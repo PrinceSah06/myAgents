@@ -18,7 +18,7 @@ function Nav() {
         <MessageSquare size={13} className='text-indigo-400'/>
       </div>
       <div className=" text-[14px] font-semibold text-slate-100 tracking-tight">
-        {selectedConversation?.title || "New Chat"}
+        {selectedConversation?.title || selectedConversation?.titel || "New Chat"}
       </div>
       <div className="text-[10px] font-medium text-slate-600 bg-white/[0.04] border
       border-white/[0.05] py-0.5  px-2 rounded-lg">

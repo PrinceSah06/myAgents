@@ -1,23 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { act } from "react";
-
 const ConversationSlice = createSlice({
   name: "conversation",
-  initialState: { conversatins: []
-    ,selectedConversation:null
-   },
+  initialState: { conversations: [], selectedConversation: null },
   reducers: {
 
     setConversations:(state,action)=>{
-        state.conversatins= action.payload
-        if (!state.selectedConversation && action.payload.length > 0) {
-            state.selectedConversation = action.payload[0]
+        state.conversations = action.payload
+        if (state.selectedConversation) {
+            state.selectedConversation = action.payload.find(
+              (conversation) => conversation._id === state.selectedConversation._id,
+            ) ?? action.payload[0] ?? null;
+        } else {
+            state.selectedConversation = action.payload[0] ?? null;
         }
     }
 ,
 
     addConversation:(state,action)=>{
-        state.conversatins.unshift( action.payload)
+        state.conversations.unshift(action.payload)
+        state.selectedConversation = action.payload
     }
 
     , setSelectConversation:(state,action)=>{

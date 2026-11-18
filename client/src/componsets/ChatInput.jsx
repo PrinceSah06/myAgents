@@ -1,12 +1,92 @@
-import React from 'react'
- 
+import { Mic, Paperclip, Send } from "lucide-react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import sendMessage from "../features/sendMessage";
+import { setMessages } from "../redux/messageSlice";
 
 function ChatInput() {
+  const selectedConversation = useSelector(
+    (state) => state.conversation.selectedConversation,
+  );
+  const messages = useSelector((state) => state.message.messages);
+  const dispatch = useDispatch();
+
+  const [value, setValue] = useState("");
+
+  const handleSendMessage = async () => {
+    const prompt = value.trim();
+    if (!prompt || !selectedConversation?._id) return;
+
+    try {
+      const payload = { prompt, conversationId: selectedConversation._id };
+
+
+      setValue("")
+      const data = await sendMessage(payload);
+      if (!data) return;
+      dispatch(
+        setMessages([
+          ...messages,
+          { role: "user", content: prompt },
+          { role: "assistant", content: data.message },
+        ]),
+      );
+      setValue("");
+    } catch (error) {
+      console.log("Error while handling message:", error);
+    }
+  };
+
   return (
-    <div>
-      
+    <div className="w-full overflow-hidden px-3 md:px-5 py-4 border-t border-white/[0.06] bg-[#0d0f14]">
+      <div
+        className="flex flex-col gap-2 bg-white/[0.03]  border border-white/[0.07] rounded-2xl px-4
+pt-3.5 pb-2"
+      >
+        <textarea
+          onChange={(e) => setValue(e.target.value)}
+          className="w-full bg-transparent outline-none resize-none text-[14px] text-slate-200 
+placeholder:text-slate-600 leading-relaxed [scrollbar-width:none] [&:-webkit-scrollbar]:hidden
+disabled:opacity-50"
+          placeholder="type heere"
+          rows={3}
+        />
+      </div>
+      <div className=" atachmet  flex items-center justify-between">
+        <div className=" flex items-center gap-1">
+          <button
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-600 
+  hover:text-slate-400 hover:bg-white/[0.05] border border-transparent hover:border-white/[0.06]
+   transition-all duration-150 bg-transparent cursor-pointer
+   "
+          >
+            <Paperclip size={16} />
+          </button>
+          <button
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-slate-600 
+  hover:text-slate-400 hover:bg-white/[0.05] border border-transparent hover:border-white/[0.06]
+   transition-all duration-150 bg-transparent cursor-pointer
+   "
+          >
+            <Mic size={16} />
+          </button>
+        </div>
+        <button
+          disabled={!value}
+          className={`flex items-center justify-center w-8 h-8 rounded-r-lg border-none 
+cursor-pointer trasition-all duration-150  ${
+            value.trim()
+              ? "bg-linear-to-br from-indigo-500 to-violet-700 hover:opacity-90 text-white"
+              : "text-slate-600 cursor-not-allowed"
+          }  `}
+          onClick={handleSendMessage}
+        >
+          <Send size={15} />
+        </button>
+        <div></div>
+      </div>
     </div>
-  )
+  );
 }
 
-export default ChatInput
+export default ChatInput;

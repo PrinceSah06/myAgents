@@ -47,14 +47,9 @@ export const  getConversations = async(req , res )=>{
 export const  updateConversation = async(req , res )=>{
     try {
       const {id,title}  = req.body;
-
-
-    
-
-    const conversation = await Conversation.findByIdAndUpdate(id,{title});
-
-    
-
+      const userId = req.get("x-user-id");
+      const conversation = await Conversation.findOneAndUpdate({ _id: id, userId }, { title }, { new: true, runValidators: true });
+      if (!conversation) return res.status(404).json({ message: "Conversation not found" });
     return res.status(200).json(conversation);
   } catch (error) {
     return res.status(500).json({
@@ -71,7 +66,9 @@ export const saveMessage = async (req , res)=>{
     try {
         
         const {conversationId,role, content}= req.body;
-
+        const userId = req.get("x-user-id");
+        const conversation = await Conversation.findOne({ _id: conversationId, userId });
+        if (!conversation) return res.status(404).json({ message: "Conversation not found" });
 
         const message = await Message.create({
             content, conversationId, role
@@ -89,9 +86,12 @@ export const getMessage = async (req ,res)=>{
   try {
     
     const conversationId = req.params.conversationId
+    const userId = req.get("x-user-id");
+    const conversation = await Conversation.findOne({ _id: conversationId, userId });
+    if (!conversation) return res.status(404).json({ message: "Conversation not found" });
 
     const messages = await Message.find({conversationId
-    }).sort({createdAt:-1})
+    }).sort({ createdAt: 1 });
 
     return res.status(200).json(messages)
   } catch (error) {

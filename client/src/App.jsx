@@ -20,6 +20,7 @@ function App() {
           await api.post("/api/auth/login", { token });
         } catch (error) {
           console.error("Unable to establish the app session:", error);
+          dispatch(setUserData(null));
           setAuthReady(true);
           return;
         }

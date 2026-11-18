@@ -22,13 +22,13 @@ import { setUserId } from "firebase/analytics";
 
 const SideBar = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const { conversatins: conversations = [], selectedConversation = null } =
+  const { conversations = [], selectedConversation = null } =
     useSelector((state) => state.conversation);
 
   const userData = useSelector((state) => state.user.userData);
   const dispatch = useDispatch();
 
-  const [ImageError, setImageError] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   useEffect(() => {
     const getConv = async () => {
@@ -38,7 +38,7 @@ const SideBar = () => {
     };
 
     getConv();
-  }, [userData._id]);
+  }, [userData?.uid, dispatch]);
 
   const handleCreateConversation = async () => {
     const data = await createConversation();
@@ -112,22 +112,16 @@ onClick={()=>handleCreateConversation()}
         
 
   <div className="relative shrink-0">
-                {userData?.avatar || !ImageError ? (
+                {userData?.avatar && !imageError ? (
                   <img
                     src={userData?.avatar}
                     className="w-9 h-9 rounded-[10px] object-cover border-2 border-indigo-500/25"
                     alt="image"
-                    onError={() => {
-                      setImageError(true);
-                    }}
+                    onError={() => setImageError(true)}
                   ></img>
                 ) : (
-                  <div
-                    className="w-9 h-9 rounded-[10px] object-cover border-2 border-indigo-500/25"
-                    alt="image"
-                  >
-                    {" "}
-                    <User size={15} className={" text-slate-400"} />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-[10px] border-2 border-indigo-500/25">
+                    {userData?.name?.[0]?.toUpperCase() || "?"}
                   </div>
                 )}
               </div>
@@ -232,7 +226,7 @@ onClick={()=>handleCreateConversation()}
                 <span
                   className={`text-[13px] font-medium truncate${isActive ? "text-slate-100" : "text-slate-300"}`}
                 >
-                  {conv?.title || "New Chat"}
+                  {conv?.title || conv?.titel || "New Chat"}
                 </span>
               </div>
             );
@@ -252,28 +246,22 @@ onClick={()=>handleCreateConversation()}
           py-2.5 hover:bg-white/[0.05] transition-colors duration-150"
             >
               <div className="relative shrink-0">
-                {userData?.avatar || !ImageError ? (
+                {userData?.avatar && !imageError ? (
                   <img
                     src={userData?.avatar}
                     className="w-9 h-9 rounded-[10px] object-cover border-2 border-indigo-500/25"
                     alt="image"
-                    onError={() => {
-                      setImageError(true);
-                    }}
+                    onError={() => setImageError(true)}
                   ></img>
                 ) : (
-                  <div
-                    className="w-9 h-9 rounded-[10px] object-cover border-2 border-indigo-500/25"
-                    alt="image"
-                  >
-                    {" "}
-                    <User size={15} className={" text-slate-400"} />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-[10px] border-2 border-indigo-500/25">
+                    {userData?.name?.[0]?.toUpperCase() || "?"}
                   </div>
                 )}
               </div>
               <div className="flex-1 min-w-0">
                 <p className=" text-[13.5px] font-semibold text-slate-500 truncate">
-                  {userData?.name || user}
+                  {userData?.name || userData?.email || "Account"}
                 </p>
                 <p className="text-[11px] text-slate-600 mt-px ">
                   {"Free plan"}
@@ -292,10 +280,9 @@ onClick={()=>handleCreateConversation()}
               border-none bg-transparent text-yellow-600  cursor-pointer hover:bg-white/[0.08] 
               hover:text-slate-400 transition-normal duration-150"
                 
-                onClick={()=>{
-                  logOut();
-
-                  dispatch(setUserData(null))
+                onClick={async () => {
+                  await logOut();
+                  dispatch(setUserData(null));
                 }}>
                   <LogOut size={16} />
                 </button>
